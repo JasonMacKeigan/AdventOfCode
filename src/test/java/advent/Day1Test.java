@@ -19,13 +19,11 @@ public class Day1Test {
         assertPartTwo();
     }
 
-    @Before
-    public void assertPartOne() {
+    private void assertPartOne() {
         assert Day1.partOne("1111") == 4;
     }
 
-    @After
-    public void assertPartTwo() {
+    private void assertPartTwo() {
         assert Day1.partTwo("1212") == 6;
     }
 }
