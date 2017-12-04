@@ -20,7 +20,7 @@ public class Day2 {
 
     static void partOne() {
         try {
-            List<String> rows = Files.readAllLines(Paths.get("day_two_input.txt"));
+            List<String> rows = DayUtils.readLines("day_two_input.txt");
 
             int sum = 0;
 
@@ -42,7 +42,7 @@ public class Day2 {
 
     static void partTwo() {
         try {
-            List<String> rows = Files.readAllLines(Paths.get("day_two_input.txt"));
+            List<String> rows = DayUtils.readLines("day_two_input.txt");
 
             int sum = 0;
 

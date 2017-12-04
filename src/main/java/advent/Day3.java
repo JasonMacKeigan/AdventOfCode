@@ -4,6 +4,7 @@ import javafx.scene.control.Tooltip;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -13,9 +14,17 @@ import java.util.stream.Stream;
 public class Day3 {
 
     public static void main(String... args) {
-        int[][] grid = spiral(10_000, 10_000, 325_490);
 
-        System.out.println(String.format("Manhatten distance is: %s", manhattenDistance(grid, 1, 325489)));
+        try {
+            int value = Integer.parseInt(DayUtils.readLine("day_three_input.txt"));
+
+            int[][] grid = spiral(10_000, 10_000, value + 1);
+
+            System.out.println(String.format("Manhatten distance is: %s", manhattenDistance(grid, 1, value)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private static int manhattenDistance(int[][] grid, int from, int to) {
