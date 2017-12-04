@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -18,13 +19,33 @@ public class Day3 {
         try {
             int value = Integer.parseInt(DayUtils.readLine("day_three_input.txt"));
 
-            int[][] grid = spiral(10_000, 10_000, value + 1);
+            int[][] grid = spiral(10_000, 10_000, value + 1, (g, x, y, lastValue) -> lastValue + 1);
+
+            int[][] partTwoGrid = spiral(10_000, 10_000, value + 1, (g, x, y, lastValue) -> {
+                int sum = 0;
+
+                for (int xOffset = x - 1; xOffset <= x + 1; xOffset++) {
+                    for (int yOffset = y - 1; yOffset <= y + 1; yOffset++) {
+                        sum += g[xOffset][yOffset];
+                    }
+                }
+
+                return sum;
+            });
+
+           // System.out.println("Test: " + Arrays.deepToString(grid).replaceAll("], ", "\n"));
 
             System.out.println(String.format("Manhatten distance is: %s", manhattenDistance(grid, 1, value)));
+
+            System.out.println(String.format("Part two: %s", nextGreatestValue(partTwoGrid, value)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private static int nextGreatestValue(int[][] grid, int value) {
+        return Arrays.stream(grid).flatMapToInt(Arrays::stream).filter(v -> v > value).min().orElse(-1);
     }
 
     private static int manhattenDistance(int[][] grid, int from, int to) {
@@ -46,7 +67,13 @@ public class Day3 {
         throw new IllegalArgumentException(String.format("Value %s does not exist in grid.", value));
     }
 
-    private static int[][] spiral(int rows, int columns, int value) {
+    private interface PositionUpdate {
+
+        int increase(int[][] grid, int x, int y, int lastValue);
+
+    }
+
+    private static int[][] spiral(int rows, int columns, int value, PositionUpdate positionUpdate) {
         // a grid that will allow us to find the manhatten distance of two points.
         int[][] grid = new int[rows][columns];
 
@@ -68,6 +95,8 @@ public class Day3 {
 
         int valueForPosition = 1;
 
+        int lastValue = 0;
+
         while (valueForPosition < value) {
             switch (direction) {
                 case NORTH:
@@ -83,7 +112,10 @@ public class Day3 {
                     x--;
                     break;
             }
-            grid[x][y] = valueForPosition++;
+            grid[x][y] = valueForPosition == 1 ? 1 : positionUpdate.increase(grid, x, y, lastValue);
+            lastValue = grid[x][y];
+
+            valueForPosition++;
 
             if (--movementsUntilIncrease == 0) {
                 movementsUntilIncrease = incrementsPerMovement;
