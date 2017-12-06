@@ -16,6 +16,7 @@ public class Day5 {
             List<Integer> lines = DayUtils.readLines("day_five_input.txt").stream().map(line -> Integer.parseInt(line.trim())).collect(Collectors.toList());
 
             System.out.println("Part 1: " + partOne(lines));
+            System.out.println("Part 2: " + partTwo(lines));
         } catch (IOException e) {
             e.printStackTrace();
         }
