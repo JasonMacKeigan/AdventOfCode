@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Jason MacKeigan on 2017-12-07 at 12:59 AM
@@ -33,10 +35,8 @@ public class Day7 {
             }
             Program max = partOne(programs);
 
-            int difference = partTwo(max);
-
             System.out.println("Part one: " + max.name);
-            System.out.println("Part two: " + difference);
+            System.out.println("Part two: " + programs.stream().map(Day7::partTwo).min(Integer::compareTo));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,6 +53,7 @@ public class Day7 {
                 if (subprogramByName == null) {
                     continue;
                 }
+                subprogramByName.parent = program;
                 program.subprograms.add(subprogramByName);
             }
         }
@@ -75,8 +76,7 @@ public class Day7 {
         Program offset = topProgram.subprograms.stream().filter(s -> s.weight() != median).findAny().orElse(null);
 
         if (offset == null) {
-            System.out.println("Cannot find offset value.");
-            return -1;
+            return Integer.MAX_VALUE;
         }
         return offset.weight - (offset.weight() - median);
     }
@@ -90,6 +90,8 @@ public class Day7 {
         private final String[] subnames;
 
         private List<Program> subprograms = new ArrayList<>();
+
+        private Program parent;
 
         private Program(String name, int weight, String[] subnames) {
             this.name = name;
