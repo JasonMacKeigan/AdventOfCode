@@ -5,11 +5,7 @@ import org.apache.commons.math3.stat.descriptive.rank.Median;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Jason MacKeigan on 2017-12-07 at 12:59 AM
